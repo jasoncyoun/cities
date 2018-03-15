@@ -1,0 +1,14 @@
+# Serverless directories
+.serverless
+.idea
+template.yml
+
+# golang output binary directory
+bin
+
+# golang vendor (dependencies) directory
+vendor
+
+node_modules
+
+.byebug_history
