@@ -30,6 +30,7 @@ functions:
 
 plugins:
   - serverless-finch
+  - serverless-sam
 
 custom:
   stageVars:
