@@ -12,9 +12,15 @@
   revision = "6e2e37798efbb1dfd8e9c6681702e683a6046517"
   version = "v1.0.1"
 
+[[projects]]
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  revision = "a0583e0143b1624142adab07e0e97fe106d99561"
+  version = "v1.3"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3375957ebac467c0b60004a3901209363670a2ee730d5474c3d1ad1b121325bd"
+  inputs-digest = "356fa0ef3dfad38c178716e3bd18aebfc6dbb0b78d0a5449fb1da09b77b853a7"
   solver-name = "gps-cdcl"
   solver-version = 1

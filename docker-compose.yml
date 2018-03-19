@@ -1,15 +1,19 @@
-database:
-  image: mysql
-  container_name: database.mysql
-  command: mysqld --user=root --verbose
-  volumes:
-    - ./seed/mysqldump.sql:/tmp/mysqldump.sql
-    - ./seed/import.sh:/tmp/import.sh
-  ports:
-    - "3306:3306"
-  environment:
-    MYSQL_DATABASE: "cities"
-    MYSQL_USER: "cities_user"
-    MYSQL_PASSWORD: "cities_pass"
-    MYSQL_ROOT_PASSWORD: ""
-    MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+version: '3.5'
+
+services:
+  database:
+    image: mysql
+    container_name: database.mysql
+    command: mysqld --user=root --verbose
+    volumes:
+      - ./seed/mysqldump.sql:/tmp/mysqldump.sql
+      - ./seed/import.sh:/tmp/import.sh
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: "cities"
+      MYSQL_USER: "cities"
+      MYSQL_PASSWORD: "Ljk*)y89"
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+
