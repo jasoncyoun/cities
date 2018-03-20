@@ -13,14 +13,6 @@ package:
    - ./bin/**
 
 functions:
-  hello:
-    handler: bin/hello
-    events:
-      - http:
-          path: hello
-          method: post
-  world:
-    handler: bin/world
   cities:
     handler: bin/cities
     events:
