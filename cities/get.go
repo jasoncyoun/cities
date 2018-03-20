@@ -8,6 +8,7 @@ import (
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"encoding/json"
 )
 
 type Response struct {
@@ -19,13 +20,13 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	db, err := sql.Open("mysql", "cities:Ljk*)y89@tcp(database.mysql:3306)/cities")
 	fmt.Println(err)
-	fmt.Println("connected to MySQL!")
 	var city City
 	row := db.QueryRow("select `id`, `name`, `state_id`, `population` from `cities` where LOWER(`name`)=?", "los angeles")
 	err2 := row.Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
 	switch err2 {
 		case sql.ErrNoRows:
 			fmt.Println("No cities were found!")
+			return events.APIGatewayProxyResponse{Body: "City not found", StatusCode: 404}, nil
 		case nil:
 			fmt.Println(city)
 		default:
@@ -33,7 +34,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	}
 	defer db.Close()
 
-	return events.APIGatewayProxyResponse{Body: request.Body, StatusCode: 200}, nil
+	cityJson, err := json.Marshal(city)
+	return events.APIGatewayProxyResponse{Body: string(cityJson), StatusCode: 200}, nil
+
 }
 
 func main() {

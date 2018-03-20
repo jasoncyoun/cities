@@ -27,6 +27,12 @@ functions:
       - http:
           path: cities
           method: get
+  states:
+    handler: bin/states
+    events:
+      - http:
+          path: states
+          method: get
 
 plugins:
   - serverless-finch
