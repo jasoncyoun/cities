@@ -31,16 +31,23 @@ ActiveRecord::Schema.define do
   unless ActiveRecord::Base.connection.table_exists? :cities
     create_table :cities do |t|
       t.string :name, required: true
+      t.string :lowercase_name, required: true # @TODO: put this in ElasticSearch
       t.integer :state_id, required: true
       t.integer :population, default: 0
     end
-    add_index :cities, [:name, :state_id], unique: true
+    add_index :cities, [:state_id, :name], unique: true
+    add_index :cities, [:state_id, :lowercase_name], unique: true
   end
 end
 
 # Define the models
 class City < ActiveRecord::Base
   belongs_to :state, inverse_of: :cities, required: true
+  before_save :set_lowercase_name
+
+  def set_lowercase_name
+    self.lowercase_name = name.strip.downcase
+  end
 end
 
 class State < ActiveRecord::Base

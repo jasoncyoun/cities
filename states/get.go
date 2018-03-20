@@ -17,15 +17,17 @@ type Response struct {
 }
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	fmt.Println("In States: ", request.Body)
+	//fmt.Println("In States: ", request.Body)
 
 	db, err := sql.Open("mysql", "cities:Ljk*)y89@tcp(database.mysql:3306)/cities")
-	fmt.Println(err)
-	fmt.Println("connected to MySQL!")
+	if err != nil {
+		fmt.Println(err)
+	}
+	// fmt.Println("connected to MySQL!")
 
 	var states []*State
 
-	rows, err2 := db.Query("select `id`, `name`, `abbr`, `population` from `states` order by `name`")
+	rows, err2 := db.Query("SELECT `id`, `name`, `abbr`, `population` FROM `states` ORDER BY `name`")
 	if err2 != nil {
 		panic(err)
 	}

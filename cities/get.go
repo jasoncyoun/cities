@@ -15,20 +15,21 @@ type Response struct {
 	Message string `json:"message"`
 }
 
-func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	fmt.Println("Received body: ", request.Body)
+func Handler(request Request) (events.APIGatewayProxyResponse, error) {
+	//fmt.Println("Received body: ", request.Body)
 
 	db, err := sql.Open("mysql", "cities:Ljk*)y89@tcp(database.mysql:3306)/cities")
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err)
+	}
 	var city City
-	row := db.QueryRow("select `id`, `name`, `state_id`, `population` from `cities` where LOWER(`name`)=?", "los angeles")
-	err2 := row.Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
+	err2 := db.QueryRow("SELECT `id`, `name`, `state_id`, `population` FROM `cities` WHERE state_id = ? AND `lowercase_name` = ?", request.Body.StateId, request.Body.Name).Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
 	switch err2 {
 		case sql.ErrNoRows:
 			fmt.Println("No cities were found!")
 			return events.APIGatewayProxyResponse{Body: "City not found", StatusCode: 404}, nil
 		case nil:
-			fmt.Println(city)
+			// fmt.Println(city)
 		default:
 			panic(err2)
 	}
@@ -44,8 +45,17 @@ func main() {
 }
 
 type City struct {
-	ID 			int
-	Name 		string
-	StateId		int
-	Population	int
+	ID 			int `json:"id"`
+	Name 		string 	`json:"name"`
+	StateId		int `json:"state_id"`
+	Population	int `json:"population"`
+}
+
+type Request struct {
+	Body `json:"body"`
+}
+
+type Body struct {
+	Name 	string `json:"name"`
+	StateId	int `json:"state_id"`
 }
