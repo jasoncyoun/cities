@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"encoding/json"
 
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
-	"encoding/json"
-	//"os"
 )
 
 type Response struct {
@@ -17,16 +17,14 @@ type Response struct {
 }
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	//fmt.Println("In States: ", request.Body)
 
-	db, err := sql.Open("mysql", "cities:Ljk*)y89@tcp(database.mysql:3306)/cities")
+	dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:3306)/cities", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST"))
+	db, err := sql.Open("mysql", dbConnStr)
 	if err != nil {
 		fmt.Println(err)
 	}
-	// fmt.Println("connected to MySQL!")
 
 	var states []*State
-
 	rows, err2 := db.Query("SELECT `id`, `name`, `abbr`, `population` FROM `states` ORDER BY `name`")
 	if err2 != nil {
 		panic(err)
@@ -36,7 +34,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		state := new(State)
 		if err := rows.Scan(&state.ID, &state.Name, &state.Abbr, &state.Population); err != nil { panic(err.Error()) }
 		states = append(states, state)
-		fmt.Println(state)
+		//fmt.Println(state)
 	}
 	defer db.Close()
 

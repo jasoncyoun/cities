@@ -9,6 +9,7 @@ import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
+	"os"
 )
 
 type Response struct {
@@ -18,7 +19,8 @@ type Response struct {
 func Handler(request Request) (events.APIGatewayProxyResponse, error) {
 	//fmt.Println("Received body: ", request.Body)
 
-	db, err := sql.Open("mysql", "cities:Ljk*)y89@tcp(database.mysql:3306)/cities")
+	dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:3306)/cities", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST"))
+	db, err := sql.Open("mysql", dbConnStr)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -26,7 +28,6 @@ func Handler(request Request) (events.APIGatewayProxyResponse, error) {
 	err2 := db.QueryRow("SELECT `id`, `name`, `state_id`, `population` FROM `cities` WHERE state_id = ? AND `lowercase_name` = ?", request.Body.StateId, request.Body.Name).Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
 	switch err2 {
 		case sql.ErrNoRows:
-			fmt.Println("No cities were found!")
 			return events.APIGatewayProxyResponse{Body: "City not found", StatusCode: 404}, nil
 		case nil:
 			// fmt.Println(city)

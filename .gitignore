@@ -2,6 +2,7 @@
 .serverless
 .idea
 template.yml
+serverless.env.yml
 
 # golang output binary directory
 bin
