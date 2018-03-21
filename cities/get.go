@@ -27,7 +27,7 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 		fmt.Println(err)
 	}
 	var city City
-	err2 := db.QueryRow("SELECT `id`, `name`, `state_id`, `population` FROM `cities` WHERE state_id = ? AND `lowercase_name` = ?", request.QueryStringParameters["city_id"], request.QueryStringParameters["name"]).Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
+	err2 := db.QueryRow("SELECT `id`, `name`, `state_id`, `population` FROM `cities` WHERE state_id = ? AND `lowercase_name` = ?", request.QueryStringParameters["state_id"], request.QueryStringParameters["name"]).Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
 	switch err2 {
 		case sql.ErrNoRows:
 			return events.APIGatewayProxyResponse{Body: "City not found", StatusCode: 404}, nil
