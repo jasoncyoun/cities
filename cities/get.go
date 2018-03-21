@@ -10,14 +10,16 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"encoding/json"
 	"os"
+	"context"
 )
 
 type Response struct {
 	Message string `json:"message"`
 }
 
-func Handler(request Request) (events.APIGatewayProxyResponse, error) {
+func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	//fmt.Println("Received body: ", request.Body)
+	fmt.Println("query string params: ", request.QueryStringParameters)
 
 	dbConnStr := fmt.Sprintf("%s:%s@tcp(%s:3306)/cities", os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST"))
 	db, err := sql.Open("mysql", dbConnStr)
@@ -25,7 +27,7 @@ func Handler(request Request) (events.APIGatewayProxyResponse, error) {
 		fmt.Println(err)
 	}
 	var city City
-	err2 := db.QueryRow("SELECT `id`, `name`, `state_id`, `population` FROM `cities` WHERE state_id = ? AND `lowercase_name` = ?", request.Body.StateId, request.Body.Name).Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
+	err2 := db.QueryRow("SELECT `id`, `name`, `state_id`, `population` FROM `cities` WHERE state_id = ? AND `lowercase_name` = ?", request.QueryStringParameters["city_id"], request.QueryStringParameters["name"]).Scan(&city.ID, &city.Name, &city.StateId, &city.Population)
 	switch err2 {
 		case sql.ErrNoRows:
 			return events.APIGatewayProxyResponse{Body: "City not found", StatusCode: 404}, nil
