@@ -1,21 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Cities Game</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
     <script src="https://unpkg.com/vue"></script>
 </head>
 <body>
-<div id="app">
-{{ message }}
-</div>
 
-<script>
-    var app = new Vue({
-        el: '#app',
-        data: {
-            message: 'Go Serverless!'
-        }
-    })
-</script>
+    <div class="container">
+
+        <div class="row justify-content-md-center">
+
+            <div id="main-info" class="alert alert-info" role="alert">
+                <h4 class="alert-heading">How to Play</h4>
+                <p>Enter as many U.S. cities that you know (without cheating!). Your score is determined by the total population in the cities you enter.</p>
+                <hr>
+                <p class="mb-0">
+                    <small>Built with <a href="https://aws.amazon.com/lambda/">AWS Lambda</a>, <a href="https://aws.amazon.com/api-gateway/">API Gateway</a>, and <a href="https://golang.org/">Go</a> using <a href="https://serverless.com/">Serverless</a> framework.
+                        Frontend is on <a href="https://vuejs.org/">Vue.js</a> and <a href="https://getbootstrap.com/">Bootstrap 4</a>, all served off <a href="https://aws.amazon.com/s3/">S3</a>.<br/>
+                        It's <a href="https://github.com/dontmatta/cities">open source</a> so feel free to fork, make pull requests, judge, etc...
+                    </small></p>
+            </div>
+        </div>
+
+        <div class="row justify-content-md-center">
+
+            <form id="city-form">
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <input type="text" class="form-control" placeholder="City Name" name="name" ref="name">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <select class="form-control" name="state_id" ref="state_id">
+                            <option value="">State...</option>
+                            <option v-for="state in states" :value="state.id">{{ state.name }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <button type="submit" class="btn btn-success" @click.prevent="submitForm()">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="container" id="city-table"  v-if="Object.keys(submitted_cities).length == 0">
+        <div class="row justify-content-md-center"></div>
+            <table class="table table-striped table-sm">
+            <thead class="thead-light">
+            <tr>
+                <th>State</th>
+                <th>Population</th>
+                <th>% of Total</th>
+            </tr>
+            </thead>
+            <tr v-for="state in states" :id="state.id">
+                <td>{{ state.name }}</td>
+                <td>{{ state.population }}</td>
+                <td>{{ state.percentage_of_total }}</td>
+            </tr>
+            </table>
+        </div>
+    </div>
+
+    <!--
+    <div class="container" id="app">
+    {{ message }}
+    </div>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                message: 'Go Serverless!'
+            }
+        })
+    </script>
+    -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>

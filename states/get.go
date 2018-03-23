@@ -39,7 +39,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	defer db.Close()
 
 	statesJson, err := json.Marshal(states)
-	return events.APIGatewayProxyResponse{Body: string(statesJson), StatusCode: 200}, nil
+	return events.APIGatewayProxyResponse{ Body: string(statesJson), StatusCode: 200, Headers: map[string]string{ "Access-Control-Allow-Origin" : "*" } }, nil
 }
 
 func main() {

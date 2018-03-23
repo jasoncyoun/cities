@@ -39,7 +39,7 @@ func Handler(ctx context.Context, request events.APIGatewayProxyRequest) (events
 	defer db.Close()
 
 	cityJson, err := json.Marshal(city)
-	return events.APIGatewayProxyResponse{Body: string(cityJson), StatusCode: 200}, nil
+	return events.APIGatewayProxyResponse{ Body: string(cityJson), StatusCode: 200, Headers: map[string]string{ "Access-Control-Allow-Origin" : "*" } }, nil
 
 }
 
