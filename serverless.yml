@@ -42,5 +42,5 @@ custom:
       region: us-west-2
   client:
     # deploy like this: serverless client deploy --aws-profile cities --region us-west-2
-    bucketName: cities-front # -${self:provider.stage}
+    bucketName: codercade.com # -${self:provider.stage}
     distributionFolder: public
