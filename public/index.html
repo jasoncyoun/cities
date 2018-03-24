@@ -13,7 +13,7 @@
     <div class="container">
 
         <div class="row justify-content-md-center">
-            
+
             <div id="main-info" class="alert alert-info" role="alert">
                 <h4 class="alert-heading">How to Play</h4>
                 <p>Enter as many U.S. cities that you know (without cheating!). Your score is determined by the total population in the cities you enter.  The perfect score is 100.</p>
@@ -22,20 +22,20 @@
                     <small>Built with <a href="https://aws.amazon.com/lambda/">AWS Lambda</a>, <a href="https://aws.amazon.com/api-gateway/">API Gateway</a>, and <a href="https://golang.org/">Go</a> using <a href="https://serverless.com/">Serverless</a> framework.
                         Frontend is on <a href="https://vuejs.org/">Vue.js</a> and <a href="https://getbootstrap.com/">Bootstrap 4</a>, all served off <a href="https://aws.amazon.com/s3/">S3</a>.<br/>
                         It's <a href="https://github.com/dontmatta/cities">open source</a> so feel free to fork, make pull requests, judge, etc...<br/>
-                        Data used is taken from US Census Bureau information from 2010, so if it seems wrong to you, feel free to reach out to them.
+                        Data used is taken from <a href="https://www.census.gov/data/tables/2016/demo/popest/total-cities-and-towns.html">US Census Bureau</a> information from 2010, but it doesn't account for every city.  If it seems wrong to you (because I'm pretty sure it is, sorry Hawaii!), feel free to reach out to them.
                     </small></p>
             </div>
         </div>
 
         <div class="row justify-content-md-center">
 
-            <form id="city-form">
+            <form id="city-form" autocomplete="off">
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <input type="text" class="form-control" placeholder="City Name" name="name" ref="name">
                     </div>
                     <div class="form-group col-md-4">
-                        <select class="form-control" name="state_id" ref="state_id">
+                        <select class="form-control" name="state_id" ref="state_id" v-on:keyup.enter="submitForm()">
                             <option value="">State...</option>
                             <option v-for="state in states" :value="state.id">{{ state.name }}</option>
                         </select>
@@ -58,6 +58,8 @@
         <div class="row justify-content-md-center" id="score-container">
             <h1 class="display-4" id="total-score">Your Score: {{ score.toLocaleString('en') }}</h1>
         </div>
+
+        <div id="added-population-container" class="row justify-content-md-center">&nbsp;</div>
 
         <div class="row justify-content-md-center">
             <p>Your entered cities have a total of {{ submitted_population.toLocaleString('en') }} out of {{ total_population.toLocaleString('en') }} total Americans.</p>

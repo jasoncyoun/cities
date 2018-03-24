@@ -73,5 +73,6 @@ function triggerAddedCity(city) {
     city_table.submitted_population += city.population;
     city_table.score = ((city_table.submitted_population * 100.00 ) / city_table.total_population).toFixed(3);
     $('tr#' + city.state_id).fadeOut(300).fadeIn(300);
+    $('<span id="added-population">+' + city.population.toLocaleString('en')  + '!</span>').appendTo('#added-population-container');
+    $('#added-population').animate({ top: -100, opacity: 0 }, 2000, "linear", function(){ $(this).remove(); })
 }
-
