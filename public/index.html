@@ -13,10 +13,10 @@
     <div class="container">
 
         <div class="row justify-content-md-center">
-
+            
             <div id="main-info" class="alert alert-info" role="alert">
                 <h4 class="alert-heading">How to Play</h4>
-                <p>Enter as many U.S. cities that you know (without cheating!). Your score is determined by the total population in the cities you enter.</p>
+                <p>Enter as many U.S. cities that you know (without cheating!). Your score is determined by the total population in the cities you enter.  The perfect score is 100.</p>
                 <hr>
                 <p class="mb-0">
                     <small>Built with <a href="https://aws.amazon.com/lambda/">AWS Lambda</a>, <a href="https://aws.amazon.com/api-gateway/">API Gateway</a>, and <a href="https://golang.org/">Go</a> using <a href="https://serverless.com/">Serverless</a> framework.
@@ -49,18 +49,18 @@
         </div>
     </div>
 
-    <div class="container" id="city-table"  v-if="Object.keys(submitted_cities).length == 0">
+    <div class="container" id="city-table"  v-if="score >= 0">
 
         <div class="row justify-content-md-center" v-if="error_message.length > 0">
             <div class="alert alert-danger">{{ error_message }}</div>
         </div>
 
-        <div class="row justify-content-md-center">
-            <h1 class="display-4">Your Score: {{ score.toLocaleString('en') }}</h1>
+        <div class="row justify-content-md-center" id="score-container">
+            <h1 class="display-4" id="total-score">Your Score: {{ score.toLocaleString('en') }}</h1>
         </div>
 
         <div class="row justify-content-md-center">
-            <p>Your entered cities contain a total of {{ submitted_population }} out of {{ total_population.toLocaleString('en') }} total Americans.</p>
+            <p>Your entered cities have a total of {{ submitted_population.toLocaleString('en') }} out of {{ total_population.toLocaleString('en') }} total Americans.</p>
         </div>
 
         <div class="row justify-content-md-center">
@@ -73,7 +73,7 @@
                 <th>% of Total</th>
             </tr>
             </thead>
-            <tr v-for="state in states" :id="state.id">
+            <tr v-for="state in states_hash" :id="state.id">
                 <td>{{ state.name }}</td>
                 <td>{{ state.population.toLocaleString('en') }}</td>
                 <td>{{ state.entered_population.toLocaleString('en') }}</td>
@@ -83,22 +83,7 @@
         </div>
     </div>
 
-    <!--
-    <div class="container" id="app">
-    {{ message }}
-    </div>
-
-    <script>
-        var app = new Vue({
-            el: '#app',
-            data: {
-                message: 'Go Serverless!'
-            }
-        })
-    </script>
-    -->
-
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

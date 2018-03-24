@@ -10,7 +10,7 @@ Allgood, Alabama	627
 Altoona, Alabama	919
 Andalusia, Alabama	8968
 Anderson, Alabama	276
-Anniston, Alabama	22112, 
+Anniston, Alabama	22112,
 Arab, Alabama	8340
 Ardmore, Alabama	1382
 Argo, Alabama	4213
@@ -2983,7 +2983,7 @@ Wrightsville, Georgia	3616
 Yatesville, Georgia	346
 Young Harris, Georgia	1431
 Zebulon, Georgia	1166
-Urban Honolulu CDP, Hawaii	351792
+Honolulu, Hawaii	351792
 Aberdeen, Idaho	1923
 Acequia, Idaho	127
 Albion, Idaho	269
@@ -3000,7 +3000,7 @@ Bellevue, Idaho	2315
 Blackfoot, Idaho	11890
 Bliss, Idaho	297
 Bloomington, Idaho	209
-Boise City, Idaho	223154
+Boise, Idaho	223154
 Bonners Ferry, Idaho	2564
 Bovill, Idaho	247
 Buhl, Idaho	4298
@@ -6841,6 +6841,7 @@ Livingston, Kentucky	224
 London, Kentucky	8157
 Loretto, Kentucky	709
 Louisa, Kentucky	2473
+Louisville, Kentucky	616261
 Loyall, Kentucky	639
 Ludlow, Kentucky	4524
 Lynch, Kentucky	694

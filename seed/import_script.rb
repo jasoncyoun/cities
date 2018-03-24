@@ -2,6 +2,8 @@
 
 # Run this script with `$ ruby import_script.rb`
 # to-do maybe we'll need a Gemfile
+# TODO: Fix louisville, nashville, etc
+
 require 'mysql2'
 require 'active_record'
 require 'carmen'

@@ -1,6 +1,3 @@
-var submitted_cities = {};
-var state_list = [];
-
 new Vue({
     el: '#city-form',
     data: {
@@ -19,7 +16,19 @@ new Vue({
                         }
                     })
                     .then(function (response) {
-                        window.x = response;
+                        city_obj = response.data;
+                        if (city_obj.state_id in city_table.states_hash) {
+                            if (city_obj.id in city_table.states_hash[city_obj.state_id]) {
+                                city_table.error_message = "You've already entered " + city_obj.name + ".";
+                            } else {
+                                city_table.states_hash[city_obj.state_id][city_obj.id] = city_obj.population
+                                triggerAddedCity(city_obj);
+                            }
+                        } else {
+                            city_table.states_hash[city_obj.state_id] = { };
+                            city_table.states_hash[city_obj.state_id][city_obj.id] = city_obj.population;
+                            triggerAddedCity(city_obj);
+                        }
                     });
             }
         }
@@ -28,34 +37,41 @@ new Vue({
         var vm = this;
         axios.get('https://w3a63j3u04.execute-api.us-west-2.amazonaws.com/production/states')
             .then(function (response) {
-            vm.states = response.data;
-            state_list = response.data;
-            initCityTable();
+            initCityTable(vm, response.data);
       });
     }
 });
 
-function initCityTable() {
+function initCityTable(cf, states_response) {
     city_table = new Vue({
         el: '#city-table',
         data: {
             score: 0.00,
-            submitted_cities: submitted_cities,
+            //submitted_cities: submitted_cities,
             submitted_population: 0,
             total_population: 0,
-            states: [],
+            states_hash: {},
             error_message: ''
         },
         created () {
             var vm = this;
-            var total_population = 0;
-            for (i in state_list) {
-                state_list[i].percentage_of_total = 0.0;
-                state_list[i].entered_population = 0;
-                total_population += state_list[i].population;
+            
+            for (i in states_response) {
+                vm.states_hash[states_response[i].id] = states_response[i];
+                vm.states_hash[states_response[i].id].percentage_of_total = 0.0;
+                vm.states_hash[states_response[i].id].entered_population = 0;
+                vm.total_population += states_response[i].population;
             }
-            vm.states = state_list;
-            vm.total_population = total_population;
+            cf.states = states_response;
         }
     });
 }
+
+function triggerAddedCity(city) {
+    city_table.states_hash[city.state_id].entered_population += city.population;
+    city_table.states_hash[city.state_id].percentage_of_total = ((city_table.states_hash[city.state_id].entered_population * 100.00) / city_table.states_hash[city.state_id].population).toFixed(2);
+    city_table.submitted_population += city.population;
+    city_table.score = ((city_table.submitted_population * 100.00 ) / city_table.total_population).toFixed(3);
+    $('tr#' + city.state_id).fadeOut(300).fadeIn(300);
+}
+
