@@ -2,7 +2,6 @@
 
 # Run this script with `$ ruby import_script.rb`
 # to-do maybe we'll need a Gemfile
-# TODO: Fix louisville, nashville, etc
 
 require 'mysql2'
 require 'active_record'
@@ -62,16 +61,14 @@ ActiveRecord::Base.transaction do
   end
 end
 
-File.open("./city_data.txt", "r") do |f|
+File.open("./city_data.csv", "r") do |f|
   state_populations = {}
   f.each_line do |line|
-    city_state, population = line.split("\t")
-    city_name, state_name = city_state.split(", ")
-
+    city_name, state_name, population = line.split(",")
+     
     puts "Seeding #{city_name}, #{state_name}, population: #{population}"
-
-    state = State.find_by(name: state_name)
-    city = City.where(name: city_name, state: state).first_or_create!(population: population)
+    state = State.find_by(name: state_name.strip)
+    city = City.where(name: city_name.strip, state: state).first_or_create!(population: population.strip)
   end
 end
 

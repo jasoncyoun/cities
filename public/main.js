@@ -1,3 +1,4 @@
+Vue.config.productionTip = false;
 app = new Vue({
     el: '#app',
     data: {
