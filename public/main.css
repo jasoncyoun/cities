@@ -1,5 +1,6 @@
 body { font-size: 0.85rem; }
+#top-container { background: #fff; }
 #main-info { margin-top: 2rem; }
 #city-table { margin-top: 2rem; }
-#score-container { margin-bottom: 2rem; }
-#added-population { position: relative; top: 0px; color: green; }
+#score-container { }
+.added-population { position: relative; top: 0px; color: green; }
