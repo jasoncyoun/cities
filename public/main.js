@@ -17,11 +17,6 @@ app = new Vue({
             var state_id = this.$refs.state_id.value;
             if (city_name && state_id) {
                 axios.get('https://w3a63j3u04.execute-api.us-west-2.amazonaws.com/production/cities?state_id=' + state_id + '&name=' + city_name)
-                    .catch(function (error) {
-                        if (error.response) {
-                            vm.error_message = error.response.data;
-                        }
-                    })
                     .then(function (response) {
                         city_obj = response.data;
                         if (city_obj.state_id in vm.states_hash) {
@@ -35,6 +30,11 @@ app = new Vue({
                             vm.states_hash[city_obj.state_id] = { };
                             vm.states_hash[city_obj.state_id][city_obj.id] = city_obj.population;
                             triggerAddedCity(city_obj);
+                        }
+                    })
+                    .catch(function (error) {
+                        if (error.response) {
+                            vm.error_message = error.response.data;
                         }
                     });
             }
