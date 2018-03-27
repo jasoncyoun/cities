@@ -18,18 +18,20 @@ app = new Vue({
             if (city_name && state_id) {
                 axios.get('https://w3a63j3u04.execute-api.us-west-2.amazonaws.com/production/cities?state_id=' + state_id + '&name=' + city_name)
                     .then(function (response) {
-                        city_obj = response.data;
-                        if (city_obj.state_id in vm.states_hash) {
-                            if (city_obj.id in vm.states_hash[city_obj.state_id]) {
-                                vm.error_message = "You've already entered " + city_obj.name + ".";
+                        if (response.data) {
+                            city_obj = response.data;
+                            if (city_obj.state_id in vm.states_hash) {
+                                if (city_obj.id in vm.states_hash[city_obj.state_id]) {
+                                    vm.error_message = "You've already entered " + city_obj.name + ".";
+                                } else {
+                                    vm.states_hash[city_obj.state_id][city_obj.id] = city_obj.population
+                                    triggerAddedCity(city_obj);
+                                }
                             } else {
-                                vm.states_hash[city_obj.state_id][city_obj.id] = city_obj.population
+                                vm.states_hash[city_obj.state_id] = { };
+                                vm.states_hash[city_obj.state_id][city_obj.id] = city_obj.population;
                                 triggerAddedCity(city_obj);
                             }
-                        } else {
-                            vm.states_hash[city_obj.state_id] = { };
-                            vm.states_hash[city_obj.state_id][city_obj.id] = city_obj.population;
-                            triggerAddedCity(city_obj);
                         }
                     })
                     .catch(function (error) {
